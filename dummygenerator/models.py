@@ -1,6 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.contrib.auth import get_user_model
+
 # Create your models here.
 
 UserModel = get_user_model()
@@ -20,17 +21,18 @@ class FakeCSVSchema(models.Model):
     ]
 
     QUOTE_CHOCES = [
-        ("\"", "Double-quote (\")"),
-        ("'", "Single-quote (\')"),
+        ('"', 'Double-quote (")'),
+        ("'", "Single-quote (')"),
     ]
 
     author = models.ForeignKey(
-        UserModel, on_delete=models.CASCADE, related_name='userschemas')
+        UserModel, on_delete=models.CASCADE, related_name="userschemas"
+    )
     name = models.TextField()
     column_separator = models.CharField(
-        max_length=1, choices=DELIMITER_CHOICES, default=",")
-    string_character = models.CharField(
-        max_length=1, choices=QUOTE_CHOCES, default="\"")
+        max_length=1, choices=DELIMITER_CHOICES, default=","
+    )
+    string_character = models.CharField(max_length=1, choices=QUOTE_CHOCES, default='"')
 
 
 class FakeCSVSchemaColumn(models.Model):
@@ -52,17 +54,21 @@ class FakeCSVSchemaColumn(models.Model):
     ]
 
     target_schema = models.ForeignKey(
-        FakeCSVSchema, on_delete=models.CASCADE, related_name="schemacolumns")
+        FakeCSVSchema, on_delete=models.CASCADE, related_name="schemacolumns"
+    )
     name = models.TextField(verbose_name="column name")
-    data_type = models.IntegerField(
-        choices=DATA_TYPES_CHOICES, verbose_name='type')
+    data_type = models.IntegerField(choices=DATA_TYPES_CHOICES, verbose_name="type")
     order = models.IntegerField(blank=True, default=0)
 
     def save(self, *args, **kwargs):
         # Auto numbering if not entered by user
         if not self.order:
             try:
-                self.order = FakeCSVSchemaColumn.objects.filter(
-                    target_shema=self.target_schema).count() + 1
+                self.order = (
+                    FakeCSVSchemaColumn.objects.filter(
+                        target_shema=self.target_schema
+                    ).count()
+                    + 1
+                )
             except ObjectDoesNotExist:
                 pass
