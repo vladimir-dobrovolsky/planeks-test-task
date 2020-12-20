@@ -64,8 +64,8 @@ class FakeCSVSchemaColumn(models.Model):
     name = models.TextField(verbose_name="column name", blank=True, null=True)
     data_type = models.IntegerField(choices=DATA_TYPES_CHOICES, verbose_name="type")
     order = models.IntegerField(blank=True, default=0)
-    data_range_from = models.IntegerField(blank=True, null=True)
-    data_range_to = models.IntegerField(blank=True, null=True)
+    data_range_from = models.IntegerField(blank=True, null=True, verbose_name="from")
+    data_range_to = models.IntegerField(blank=True, null=True, verbose_name="to")
 
     def clean(self):
         # Auto numbering columns if not entered by user
@@ -79,3 +79,6 @@ class FakeCSVSchemaColumn(models.Model):
                 )
             except ObjectDoesNotExist:
                 pass
+
+    class Meta:
+        ordering = ("order",)

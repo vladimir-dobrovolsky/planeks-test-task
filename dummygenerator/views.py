@@ -6,6 +6,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import (
     TemplateView,
@@ -138,9 +139,20 @@ class CreateSchema(LoginRequiredMixin, CreateWithInlinesView):
         data = {"author": self.request.user}
         return data
 
+    def post(self, request, *args, **kwargs):
+        super().post(request, *args, **kwargs)
+        if "action" in request.POST:
+            return redirect(reverse("list"), permanent=False)
+        return
+
     def get_success_url(self):
-        obj = self.object
-        return reverse("edit", kwargs={"pk": obj.pk})
+        if "action" in self.request.POST:
+            if self.request.POST["action"] == "submit":
+                # return reverse("list")
+                return "/"
+        else:
+            obj = self.object
+            return reverse("edit", kwargs={"pk": obj.pk})
 
 
 class DeleteSchema(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

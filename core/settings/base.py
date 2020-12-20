@@ -68,6 +68,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "core.urls"
 
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
