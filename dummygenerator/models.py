@@ -33,6 +33,11 @@ class FakeCSVSchema(models.Model):
         max_length=1, choices=DELIMITER_CHOICES, default=","
     )
     string_character = models.CharField(max_length=1, choices=QUOTE_CHOCES, default='"')
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return f"/schemas/?{self.pk}"
 
 
 class FakeCSVSchemaColumn(models.Model):
