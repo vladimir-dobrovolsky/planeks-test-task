@@ -59,9 +59,11 @@ class FakeCSVSchemaColumn(models.Model):
     name = models.TextField(verbose_name="column name")
     data_type = models.IntegerField(choices=DATA_TYPES_CHOICES, verbose_name="type")
     order = models.IntegerField(blank=True, default=0)
+    data_range_from = models.IntegerField(blank=True, null=True)
+    data_range_to = models.IntegerField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        # Auto numbering if not entered by user
+        # Auto numbering columns if not entered by user
         if not self.order:
             try:
                 self.order = (
