@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 # plugins
 INSTALLED_APPS += [
     "django_probes",
+    "extra_views",
 ]
 
 # own apps

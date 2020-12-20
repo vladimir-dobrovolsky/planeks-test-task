@@ -1,5 +1,42 @@
 {% extends "dummygenerator/_base.html" %}
 
 {% block content %}
-  <h1>Create schema {{ request.user.username }}</h1>
+  <section class="uk-section uk-section-xsmall">
+  <div class="uk-flex uk-flex-between uk-flex-middle">
+    <div>
+      <h1 class="uk-h3 uk-margin-top">New schema</h1>
+    </div>
+    <div>
+      <button class="uk-button uk-button-primary" type="submit" form="schemaform">Submit</button>
+    </div>
+  </div>
+    <form method="post" enctype='multipart/form-data'>
+      {% csrf_token %}
+      {{ form }}
+      <h3>Schema columns</h3>
+      <div class="uk-flex uk-flex-column">
+        {{ formset.management_form }}
+        {% for formset in inlines %}
+          {% csrf_token %}
+          <div class="formset">
+          {{ formset }}
+          </div>
+          {% if inlines.length == 1 %}
+            <hr>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div>
+        <button class="uk-button uk-button-default" type="submit" value="Submit">Add column</button>
+      </div>
+    </form>
+  </section>
+
+  <style>
+      form {
+          display: flex;
+          flex-direction: column;
+      }
+  </style>
+
 {% endblock %}

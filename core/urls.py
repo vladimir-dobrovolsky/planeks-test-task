@@ -24,10 +24,19 @@ from dummygenerator.views import (
     SignupView,
     Profile,
     HomeRedirect,
+    ListSchemas,
+    CreateSchema,
+    EditSchema,
+    DeleteSchema,
 )
 
 urlpatterns = [
     path("", HomepageView.as_view(), name="home"),
+    # TODO: REWRITE FOR NAMESPACES
+    path("schemas/", ListSchemas.as_view(), name="list"),
+    path("schemas/create", CreateSchema.as_view(), name="create"),
+    path("schemas/edit/<pk>", EditSchema.as_view(), name="edit"),
+    path("schemas/delete/<pk>", DeleteSchema.as_view(), name="delete"),
     path("accounts/login/", Login.as_view(), name="login"),
     path("accounts/logout/", Logout.as_view(), name="logout"),
     path("accounts/signup/", SignupView.as_view(), name="signup"),

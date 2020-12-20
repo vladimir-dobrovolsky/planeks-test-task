@@ -1,5 +1,35 @@
 {% extends "dummygenerator/_base.html" %}
 
 {% block content %}
-  <h1>List schemas of {{ request.user.username }}</h1>
+  <div class="uk-flex uk-flex-between uk-flex-middle">
+    <div>
+      <h1>Data schemas</h1>
+    </div>
+    <div>
+      <a class="uk-button uk-button-primary" href="{% url 'create' %}">New schema</a>
+    </div>
+  </div>
+  <table class="uk-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Schema</th>
+      <th>Modified</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    {% for el in object_list %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ el.name|default:"Untitled schema" }}</td>
+        <td>{{ el.updated|date:"Y-m-d" }}</td>
+        <td>
+          <a href="{% url 'edit' pk=el.pk %}" class="uk-link uk-margin-small-right">Edit scheme</a>
+          <a href="{% url 'delete' pk=el.pk %}" class="uk-link uk-text-danger">Delete</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+
 {% endblock %}

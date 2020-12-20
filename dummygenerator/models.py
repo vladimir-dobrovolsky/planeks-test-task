@@ -28,7 +28,7 @@ class FakeCSVSchema(models.Model):
     author = models.ForeignKey(
         UserModel, on_delete=models.CASCADE, related_name="userschemas"
     )
-    name = models.TextField()
+    name = models.TextField(blank=True, null=True)
     column_separator = models.CharField(
         max_length=1, choices=DELIMITER_CHOICES, default=","
     )
@@ -61,19 +61,19 @@ class FakeCSVSchemaColumn(models.Model):
     target_schema = models.ForeignKey(
         FakeCSVSchema, on_delete=models.CASCADE, related_name="schemacolumns"
     )
-    name = models.TextField(verbose_name="column name")
+    name = models.TextField(verbose_name="column name", blank=True, null=True)
     data_type = models.IntegerField(choices=DATA_TYPES_CHOICES, verbose_name="type")
     order = models.IntegerField(blank=True, default=0)
     data_range_from = models.IntegerField(blank=True, null=True)
     data_range_to = models.IntegerField(blank=True, null=True)
 
-    def save(self, *args, **kwargs):
+    def clean(self):
         # Auto numbering columns if not entered by user
         if not self.order:
             try:
                 self.order = (
                     FakeCSVSchemaColumn.objects.filter(
-                        target_shema=self.target_schema
+                        target_schema=self.target_schema
                     ).count()
                     + 1
                 )
