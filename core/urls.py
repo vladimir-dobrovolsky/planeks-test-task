@@ -17,10 +17,23 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 
-from dummygenerator.views import HomepageView
+from dummygenerator.views import (
+    HomepageView,
+    Login,
+    Logout,
+    SignupView,
+    Profile,
+    HomeRedirect,
+)
 
 urlpatterns = [
     path("", HomepageView.as_view(), name="home"),
+    path("accounts/login/", Login.as_view(), name="login"),
+    path("accounts/logout/", Logout.as_view(), name="logout"),
+    path("accounts/signup/", SignupView.as_view(), name="signup"),
+    path("accounts/profile/", Profile.as_view(), name="profile"),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/", HomeRedirect.as_view()),
     path("admin/", admin.site.urls),
 ]
 
