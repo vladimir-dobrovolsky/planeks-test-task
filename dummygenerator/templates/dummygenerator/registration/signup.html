@@ -1,0 +1,49 @@
+{% extends 'dummygenerator/_base_blank.html' %}
+
+{% block title %}Signup | {% endblock %}
+
+
+{% load static %}
+
+{% block content %}
+
+<section class="uk-section uk-section-xsmall">
+    <div class="uk-container">
+        <h1 class="uk-h3 uk-text-center uk-margin-top">User creation</h1>
+        <div class="uk-flex uk-flex-middle uk-flex-column">
+            <div class="uk-card uk-card-default uk-card-body uk-border-rounded uk-width-medium uk-width-large@m uk-padding-small">
+                {% if form.errors %}
+                {% for error in form.non_field_errors %}
+                <div class="uk-text-danger">
+                    <span uk-icon="warning" class="uk-margin-small-right"></span><strong>{{ error|escape }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <form method="post" class="uk-form-stacked">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        <div class="uk-form-controls">
+                            {{ field }}
+                        </div>
+                        {% for error in field.errors %}
+                        <div class="uk-text-danger">
+                            <span uk-icon="warning" class="uk-margin-small-right"></span><strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    <div class="uk-text-center">
+                        <button id="submitButton" class="uk-button uk-button-primary uk-border-pill" type="submit">Signup</button>
+                    </div>
+                </form>
+            </div>
+            <div class="uk-text-center uk-margin uk-width-large uk-flex uk-flex-around">
+                <div><a href="{% url 'login' %}" class="uk-button-text">I already have an account</a></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
