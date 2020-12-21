@@ -14,17 +14,21 @@ from django.views.generic import (
     UpdateView,
     CreateView,
     DeleteView,
+    RedirectView,
+    DetailView,
 )
-from django.views.generic import RedirectView
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import FormMixin
 
 from .models import FakeCSVSchema, FakeCSVSchemaColumn
-from .forms import FakeCSVSchemaForm, FakeCSVSchemaColumnInline
+from .forms import FakeCSVSchemaForm, FakeCSVSchemaColumnInline, DatasetCreateForm
 from extra_views import (
     CreateWithInlinesView,
     UpdateWithInlinesView,
     InlineFormSetFactory,
 )
 
+from .tasks import generate_csv_task
 
 # Create your views here.
 
@@ -173,3 +177,33 @@ class DeleteSchema(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         else:
             return messages.error(self.request, "Error deleting schema")
+
+
+# class ListDataSets(LoginRequiredMixin, SingleObjectMixin, ListView):
+class ListDataSets(LoginRequiredMixin, FormMixin, DetailView):
+    """
+    Return the list user-created schemas.
+    """
+
+    model = FakeCSVSchema
+    context_object_name = "schema"
+    template_name = "dummygenerator/schemas/datasets-list.html"
+
+    form_class = DatasetCreateForm
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        generate_csv_task.delay(
+            obj=str(self.get_object().pk),
+            author=request.user.pk,
+            rows=request.POST["rows"],
+        )
+        return HttpResponseRedirect(
+            reverse("datasets", kwargs={"pk": self.get_object().pk})
+        )
+
+    # def get_queryset(self):
+    #     queryset = FakeCSVSchema.objects.filter(author=self.request.user)
+    #     return queryset

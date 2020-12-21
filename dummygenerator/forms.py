@@ -42,3 +42,7 @@ class FakeCSVSchemaColumnInline(InlineFormSet):
         "can_order": False,
         "can_delete": True,
     }
+
+
+class DatasetCreateForm(forms.Form):
+    rows = forms.IntegerField(label="Rows")

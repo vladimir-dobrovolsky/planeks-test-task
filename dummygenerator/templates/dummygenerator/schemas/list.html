@@ -21,7 +21,7 @@
     {% for el in object_list %}
       <tr>
         <td>{{ forloop.counter }}</td>
-        <td>{{ el.name|default:"Untitled schema" }}</td>
+        <td><a href="{% url 'datasets' pk=el.pk %}" class="uk-link">{{ el.name|default:"Untitled schema" }}</a></td>
         <td>{{ el.updated|date:"Y-m-d" }}</td>
         <td>
           <a href="{% url 'edit' pk=el.pk %}" class="uk-link uk-margin-small-right">Edit scheme</a>

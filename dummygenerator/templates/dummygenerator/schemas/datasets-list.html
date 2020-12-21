@@ -1,0 +1,58 @@
+{% extends "dummygenerator/_base.html" %}
+
+{% block content %}
+  <div class="uk-flex uk-flex-between uk-flex-middle">
+    <div>
+      <h1>Data sets of {{ schema }}</h1>
+    </div>
+    <div>
+      <form method="post">
+        {% csrf_token %}
+      <label> Rows:
+        <input name="rows" type="number" />
+      </label>
+      <button class="uk-button uk-button-primary" type="submit" value="submit">Generate data</button>
+      </form>
+    </div>
+  </div>
+  <div>
+    {% for k,v in schema.generate_data_set.items %}
+      <div>
+        {% if k != "content" %}
+        {{ k }} : {{ v }}
+        {% else %}
+        {{ k }} : <br>
+          {% for row in v %}
+            <div>
+            {{ row }}
+            </div>
+          {% endfor %}
+        {% endif %}
+        <hr>
+
+      </div>
+    {% endfor %}
+  </div>
+  <table class="uk-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Created</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    {% for el in object_list %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ el.updated|date:"Y-m-d" }}</td>
+        <td><span class="uk-label uk-label-success">Ready</span></td>
+        <td>
+          <a href="{% url 'delete' pk=el.pk %}" class="uk-link">Download</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+
+{% endblock %}
