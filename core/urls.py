@@ -28,6 +28,7 @@ from dummygenerator.views import (
     CreateSchema,
     EditSchema,
     DeleteSchema,
+    ListDataSets,
 )
 
 urlpatterns = [
@@ -37,6 +38,7 @@ urlpatterns = [
     path("schemas/create", CreateSchema.as_view(), name="create"),
     path("schemas/edit/<pk>", EditSchema.as_view(), name="edit"),
     path("schemas/delete/<pk>", DeleteSchema.as_view(), name="delete"),
+    path("schemas/export/<pk>", ListDataSets.as_view(), name="datasets"),
     path("accounts/login/", Login.as_view(), name="login"),
     path("accounts/logout/", Logout.as_view(), name="logout"),
     path("accounts/signup/", SignupView.as_view(), name="signup"),

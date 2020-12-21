@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 # plugins
 INSTALLED_APPS += [
     "django_probes",
+    "django_celery_results",
     "extra_views",
 ]
 
@@ -156,3 +157,6 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     # other finders..
 )
+
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_TASK_TRACK_STARTED = True
