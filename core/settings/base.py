@@ -148,9 +148,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "www", "media")
 
 FILE_UPLOAD_PERMISSIONS = 0o644
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "core", "static"),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "core", "static"),
+# ]
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
