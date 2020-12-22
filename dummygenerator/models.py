@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
@@ -84,6 +85,11 @@ class FakeCSVSchema(models.Model):
         fieldnames = []
         for i in columns:
             fieldnames.append(i["name"])
+
+        try:
+            os.mkdir(settings.MEDIA_ROOT)
+        except OSError:
+            print("error creating output folder")
 
         with open(settings.MEDIA_ROOT + f"/{uid}.csv", "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames, dialect="custom")
