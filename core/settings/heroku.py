@@ -4,5 +4,6 @@ Django settings for core project when deployed on heroku.
 
 import os
 from .base import *
+import django_heroku
 
-pass
+django_heroku.settings(locals())
