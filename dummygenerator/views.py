@@ -130,8 +130,15 @@ class EditSchema(LoginRequiredMixin, UserPassesTestMixin, UpdateWithInlinesView)
             return True
 
     def get_success_url(self):
-        obj = self.get_object()
-        return reverse("edit", kwargs={"pk": obj.pk})
+        if "action" in self.request.POST:
+            if self.request.POST["action"] == "submit":
+                return reverse("list")
+            if self.request.POST["action"] == "add_column":
+                obj = self.object
+                return reverse("edit", kwargs={"pk": obj.pk})
+
+        else:
+            return reverse("list")
 
 
 class CreateSchema(LoginRequiredMixin, CreateWithInlinesView):
@@ -148,13 +155,15 @@ class CreateSchema(LoginRequiredMixin, CreateWithInlinesView):
         return data
 
     def get_success_url(self):
-        return reverse("list")
-        # if "action" in self.request.POST:
-        #     if self.request.POST["action"] == "submit":
-        #         return "/"
-        # else:
-        #     obj = self.object
-        #     return reverse("edit", kwargs={"pk": obj.pk})
+        if "action" in self.request.POST:
+            if self.request.POST["action"] == "submit":
+                return reverse("list")
+            if self.request.POST["action"] == "add_column":
+                obj = self.object
+                return reverse("edit", kwargs={"pk": obj.pk})
+
+        else:
+            return reverse("list")
 
 
 class DeleteSchema(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

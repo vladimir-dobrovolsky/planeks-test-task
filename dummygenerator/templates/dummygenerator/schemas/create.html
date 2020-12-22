@@ -12,8 +12,8 @@
         </div>
       </div>
       {% csrf_token %}
-      <div class="uk-padding uk-padding-remove-vertical">
-      {{ form }}
+      <div class="uk-padding uk-padding-remove-vertical head-form">
+        {{ form }}
       </div>
       <h3 class="uk-padding uk-padding-remove-vertical">Schema columns</h3>
       <div class="uk-flex uk-flex-column">
@@ -46,8 +46,22 @@
       }
 
       .columns-form.last {
-        border: 1px solid #E5E5E5;
-        border-radius: 4px;
+          border: 1px solid #E5E5E5;
+          border-radius: 4px;
+      }
+
+      .columns-form {
+          display: grid;
+          grid-template: '1 1 1 1 1 1 1 1 1 1 1 1';
+          grid-gap: 15px;
+          align-items: center;
+      }
+
+      .head-form {
+          display: grid;
+          grid-template: '1 1';
+          grid-gap: 15px;
+
       }
   </style>
 
