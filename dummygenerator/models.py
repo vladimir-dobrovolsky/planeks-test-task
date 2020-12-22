@@ -1,7 +1,4 @@
-import os
-
 from django.conf import settings
-from django.core.files import File
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models

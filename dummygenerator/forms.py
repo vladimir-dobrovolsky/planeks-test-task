@@ -1,6 +1,7 @@
 from django import forms
+from extra_views import InlineFormSet
+
 from .models import FakeCSVSchema, FakeCSVSchemaColumn
-from extra_views import InlineFormSetFactory, InlineFormSet
 
 
 class FakeCSVSchemaForm(forms.ModelForm):

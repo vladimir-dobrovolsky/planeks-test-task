@@ -4,31 +4,24 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.exceptions import ImproperlyConfigured
-from django.db import transaction
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import (
     TemplateView,
     ListView,
-    UpdateView,
     CreateView,
     DeleteView,
     RedirectView,
     DetailView,
 )
-from django.views.generic.detail import SingleObjectMixin
-from django.views.generic.list import MultipleObjectMixin
 from django.views.generic.edit import FormMixin
-
-from .models import FakeCSVSchema, FakeCSVSchemaColumn, ExportedDataset
-from .forms import FakeCSVSchemaForm, FakeCSVSchemaColumnInline, DatasetCreateForm
 from extra_views import (
     CreateWithInlinesView,
     UpdateWithInlinesView,
-    InlineFormSetFactory,
 )
 
+from .forms import FakeCSVSchemaForm, FakeCSVSchemaColumnInline, DatasetCreateForm
+from .models import FakeCSVSchema
 from .tasks import generate_csv_task
 
 # Create your views here.
@@ -89,7 +82,6 @@ class SignupView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        """Return the URL to redirect to after processing a valid form."""
         try:
             url = reverse("profile")
         except AttributeError:
@@ -120,7 +112,6 @@ class EditSchema(LoginRequiredMixin, UserPassesTestMixin, UpdateWithInlinesView)
     inlines = [
         FakeCSVSchemaColumnInline,
     ]
-    # fields = ["author", "name", "column_separator", "string_character"]
     template_name = "dummygenerator/schemas/create.html"
 
     def test_func(self):
@@ -150,7 +141,6 @@ class CreateSchema(LoginRequiredMixin, CreateWithInlinesView):
     template_name = "dummygenerator/schemas/create.html"
 
     def get_initial(self):
-        # return whatever you'd normally use as the initial data for your formset.
         data = {"author": self.request.user}
         return data
 
@@ -186,7 +176,6 @@ class DeleteSchema(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return messages.error(self.request, "Error deleting schema")
 
 
-# class ListDataSets(LoginRequiredMixin, SingleObjectMixin, ListView):
 class ListDataSets(LoginRequiredMixin, FormMixin, DetailView):
     """
     Return the list user-created schemas.
@@ -209,7 +198,3 @@ class ListDataSets(LoginRequiredMixin, FormMixin, DetailView):
         return HttpResponseRedirect(
             reverse("datasets", kwargs={"pk": self.get_object().pk})
         )
-
-    # def get_queryset(self):
-    #     queryset = FakeCSVSchema.objects.filter(author=self.request.user)
-    #     return queryset
