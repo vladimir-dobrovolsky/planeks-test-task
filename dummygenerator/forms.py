@@ -29,6 +29,18 @@ class FakeCSVSchemaColumnForm(forms.ModelForm):
             "data_range_to": forms.NumberInput(),
         }
 
+        # TODO: conditional required attr and display logic on inputs:
+        #  force required only on non-empty columns and hide range inputs
+        #  from input types that don't support it
+
+        # widgets = {
+        #     "name": forms.TextInput(attrs={"class": "special", "required": True}),
+        #     "order": forms.NumberInput(attrs={"class": "special"}),
+        #     "data_type": forms.Select(attrs={"class": "special", "required": True}),
+        #     "data_range_from": forms.NumberInput(attrs={"class": "special"}),
+        #     "data_range_to": forms.NumberInput(attrs={"class": "special"}),
+        # }
+
 
 class FakeCSVSchemaColumnInline(InlineFormSet):
     model = FakeCSVSchemaColumn

@@ -56,7 +56,8 @@ class FakeCSVSchema(models.Model):
 
         faker = Faker()
 
-        def fake_data(data_type: int, range=None):
+        def fake_data(data_type: int, val_range=(0, 100)):
+            # TODO: lower limit on sentences
             faker_methods = {
                 0: faker.name(),
                 1: faker.job(),
@@ -64,8 +65,10 @@ class FakeCSVSchema(models.Model):
                 3: faker.domain_name(),
                 4: faker.phone_number(),
                 5: faker.company(),
-                6: faker.paragraph(nb_sentences=5, variable_nb_sentences=False),
-                7: faker.random_int(0, 100),
+                6: faker.paragraph(
+                    nb_sentences=val_range[1], variable_nb_sentences=False
+                ),
+                7: faker.random_int(*val_range),
                 8: faker.address(),
                 9: faker.date(),
             }
@@ -92,7 +95,17 @@ class FakeCSVSchema(models.Model):
                 row = {}
                 for col in columns:
                     column = col["name"]
-                    value = fake_data(col["data_type"])
+                    if (
+                        col["data_range_from"]
+                        and col["data_range_to"]
+                        and col["data_type"] in (6, 7)
+                    ):
+                        value = fake_data(
+                            col["data_type"],
+                            val_range=(col["data_range_from"], col["data_range_to"]),
+                        )
+                    else:
+                        value = fake_data(col["data_type"])
                     row[column] = value
                 writer.writerow(row)
 
