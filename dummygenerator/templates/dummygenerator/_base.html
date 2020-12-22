@@ -13,9 +13,10 @@
         <li class="uk-active">
           <a href="#!">{{ page_title }}</a>
         </li>
-      {% else %}
-        <li class="">
-          <a href="{% url 'home' %}">Home</a>
+      {% endif %}
+      {% if request.user.is_authenticated %}
+        <li class="uk-active">
+          <a href="{% url 'list' %}">Schemas</a>
         </li>
       {% endif %}
     </ul>
@@ -26,12 +27,6 @@
 
     <ul class="uk-navbar-nav">
       {% if request.user.is_authenticated %}
-        <li class="">
-          <a href="{% url 'list' %}">Schemas</a>
-        </li>
-        <li class="">
-          <a href="{% url 'create' %}">Create</a>
-        </li>
         <li>
           <a class="uk-active uk-width-medium uk-text-truncate" href="{% url 'profile' %}">Hello, {{ request.user.username }}</a>
         </li>

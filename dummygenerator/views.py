@@ -45,11 +45,12 @@ class HomeRedirect(RedirectView):
 
 class HomepageView(TemplateView):
     template_name = "dummygenerator/home.html"
-    extra_context = {"page_title": "Home"}
+    # extra_context = {"page_title": "Home"}
 
 
 class Login(LoginView):
     template_name = "dummygenerator/registration/login.html"
+    extra_context = {"page_title": "Login"}
 
 
 class Logout(LogoutView):
@@ -60,6 +61,7 @@ class SignupView(CreateView):
     template_name = "dummygenerator/registration/signup.html"
     model = UserModel
     form_class = UserCreationForm
+    extra_context = {"page_title": "Signup"}
 
     def form_valid(self, form):
         super().form_valid(form)
@@ -97,6 +99,7 @@ class SignupView(CreateView):
 
 class Profile(LoginRequiredMixin, TemplateView):
     template_name = "dummygenerator/registration/profile.html"
+    extra_context = {"page_title": "Profile"}
 
 
 class ListSchemas(LoginRequiredMixin, ListView):
