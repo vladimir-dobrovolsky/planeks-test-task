@@ -1,5 +1,13 @@
 {% extends "dummygenerator/_base.html" %}
 
 {% block content %}
-  <h1>User profile {{ request.user.username }}</h1>
+  <section class="uk-section">
+    <h1>
+      Welcome to {{ request.site.name }}, {{ request.user.username }}!
+    </h1>
+    <div class="uk-margin-top">
+      <a href="{% url 'list' %}" class="uk-button uk-button-default uk-margin-right">View data schemas</a>
+      <a href="{% url 'create' %}" class="uk-button uk-button-default uk-margin-right">Create a new schema</a>
+    </div>
+  </section>
 {% endblock %}

@@ -18,9 +18,10 @@ from django.views.generic import (
     DetailView,
 )
 from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.list import MultipleObjectMixin
 from django.views.generic.edit import FormMixin
 
-from .models import FakeCSVSchema, FakeCSVSchemaColumn
+from .models import FakeCSVSchema, FakeCSVSchemaColumn, ExportedDataset
 from .forms import FakeCSVSchemaForm, FakeCSVSchemaColumnInline, DatasetCreateForm
 from extra_views import (
     CreateWithInlinesView,
@@ -143,20 +144,14 @@ class CreateSchema(LoginRequiredMixin, CreateWithInlinesView):
         data = {"author": self.request.user}
         return data
 
-    def post(self, request, *args, **kwargs):
-        super().post(request, *args, **kwargs)
-        if "action" in request.POST:
-            return redirect(reverse("list"), permanent=False)
-        return
-
     def get_success_url(self):
-        if "action" in self.request.POST:
-            if self.request.POST["action"] == "submit":
-                # return reverse("list")
-                return "/"
-        else:
-            obj = self.object
-            return reverse("edit", kwargs={"pk": obj.pk})
+        return reverse("list")
+        # if "action" in self.request.POST:
+        #     if self.request.POST["action"] == "submit":
+        #         return "/"
+        # else:
+        #     obj = self.object
+        #     return reverse("edit", kwargs={"pk": obj.pk})
 
 
 class DeleteSchema(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -183,6 +178,7 @@ class DeleteSchema(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class ListDataSets(LoginRequiredMixin, FormMixin, DetailView):
     """
     Return the list user-created schemas.
+    TODO: Check author
     """
 
     model = FakeCSVSchema
@@ -196,9 +192,7 @@ class ListDataSets(LoginRequiredMixin, FormMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         generate_csv_task.delay(
-            obj=str(self.get_object().pk),
-            author=request.user.pk,
-            rows=request.POST["rows"],
+            obj=str(self.get_object().pk), rows=request.POST["rows"],
         )
         return HttpResponseRedirect(
             reverse("datasets", kwargs={"pk": self.get_object().pk})

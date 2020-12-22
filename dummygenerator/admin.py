@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import FakeCSVSchema, FakeCSVSchemaColumn
+from .models import FakeCSVSchema, FakeCSVSchemaColumn, ExportedDataset
 
 
 class ColumnsInline(admin.TabularInline):
@@ -15,3 +15,4 @@ class FakeCSVSchemaAdmin(admin.ModelAdmin):
 
 admin.site.register(FakeCSVSchema, FakeCSVSchemaAdmin)
 admin.site.register(FakeCSVSchemaColumn)
+admin.site.register(ExportedDataset)

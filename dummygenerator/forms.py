@@ -45,4 +45,4 @@ class FakeCSVSchemaColumnInline(InlineFormSet):
 
 
 class DatasetCreateForm(forms.Form):
-    rows = forms.IntegerField(label="Rows")
+    rows = forms.IntegerField(label="Rows", required=True)

@@ -18,16 +18,6 @@
           <a href="{% url 'home' %}">Home</a>
         </li>
       {% endif %}
-      <li>
-        <a href="#">Parent</a>
-        <div class="uk-navbar-dropdown">
-          <ul class="uk-nav uk-navbar-dropdown-nav">
-            <li class="uk-active">
-              <a href="#">Active</a>
-            </li>
-          </ul>
-        </div>
-      </li>
     </ul>
 
   </div>
@@ -35,23 +25,13 @@
   <div class="uk-navbar-right">
 
     <ul class="uk-navbar-nav">
-      <li class="">
-        <a href="{% url 'list' %}">Schemas</a>
-      </li>
-      <li class="">
-        <a href="{% url 'create' %}">Create</a>
-      </li>
-      <li>
-        <a href="#">Parent</a>
-        <div class="uk-navbar-dropdown">
-          <ul class="uk-nav uk-navbar-dropdown-nav">
-            <li class="uk-active">
-              <a href="#">Active</a>
-            </li>
-          </ul>
-        </div>
-      </li>
       {% if request.user.is_authenticated %}
+        <li class="">
+          <a href="{% url 'list' %}">Schemas</a>
+        </li>
+        <li class="">
+          <a href="{% url 'create' %}">Create</a>
+        </li>
         <li>
           <a class="uk-active uk-width-medium uk-text-truncate" href="{% url 'profile' %}">Hello, {{ request.user.username }}</a>
         </li>

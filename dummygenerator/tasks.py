@@ -15,16 +15,24 @@ logger = get_task_logger(__name__)
 
 
 @shared_task(bind=True)
-def generate_csv_task(self, obj=None, author=None, rows=None):
-    logger.info(f"=======================")
-    logger.info(f"request: {self.request.id}")
-    logger.info(f"=======================")
-    author = UserModel.objects.get(pk=author)
+def generate_csv_task(self, obj=None, rows=None):
     schema = FakeCSVSchema.objects.get(pk=int(obj))
-    request_id = self.request.id
-    dataset = ExportedDataset()
-    if schema.generate_data_set(rows=int(rows)):
-        sleep(15)
+    task_id = self.request.id
+
+    # creating dataset entry
+    dataset = ExportedDataset(schema=schema, task_id=task_id, status=0)
+    dataset.save()
+    try:
+        # generating dataset csv file and storing its url
+        result = schema.generate_data_set(rows=int(rows), uid=task_id)
+        if result:
+            dataset.download_link = result
+            dataset.status = 1
+            dataset.save()
         return True
 
-    return False
+    except:
+        # setting dataset status = error
+        dataset.status = 2
+        dataset.save()
+        raise

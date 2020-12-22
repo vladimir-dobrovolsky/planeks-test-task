@@ -1,3 +1,7 @@
+import os
+
+from django.conf import settings
+from django.core.files import File
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -47,20 +51,12 @@ class FakeCSVSchema(models.Model):
         else:
             return "Untitled schema"
 
-    def generate_data_set(self, rows=5):
+    def generate_data_set(self, rows=5, uid=None):
         """Method to generate dataset from schema"""
-        result = {"name": self.name, "rows": rows, "content": []}
-        fieldnames = self.schemacolumns.all().values()
-
-        # import csv
-        #
-        # with open("some.csv", "w", newline="") as f:
-        #     writer = csv.writer(f)
-        #     writer.writerows(someiterable)
 
         faker = Faker()
 
-        def fake_data(data_type: int):
+        def fake_data(data_type: int, range=None):
             faker_methods = {
                 0: faker.name(),
                 1: faker.job(),
@@ -75,16 +71,25 @@ class FakeCSVSchema(models.Model):
             }
             return faker_methods[data_type]
 
-        for i in range(1, rows + 1):
-            row = []
-            for name in fieldnames:
-                column = name["name"]
-                value = fake_data(name["data_type"])
-                row.append({column: value})
+        import csv
 
-            result["content"].append(row)
+        columns = self.schemacolumns.all().values()
+        fieldnames = []
+        for i in columns:
+            fieldnames.append(i["name"])
 
-        return result
+        with open(settings.MEDIA_ROOT + f"/export/{uid}.csv", "w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for i in range(rows):
+                row = {}
+                for col in columns:
+                    column = col["name"]
+                    value = fake_data(col["data_type"])
+                    row[column] = value
+                writer.writerow(row)
+
+        return f"/media/export/{uid}.csv"
 
 
 class FakeCSVSchemaColumn(models.Model):
@@ -133,7 +138,9 @@ class FakeCSVSchemaColumn(models.Model):
 
 class ExportedDataset(models.Model):
     """
-    Data sets created by user
+    Data sets generated from schemas by user.
+
+    TODO: a way to clean up data sets upon user deletion.
     """
 
     EXPORT_STATUS_CHOICES = [
@@ -141,11 +148,18 @@ class ExportedDataset(models.Model):
         (1, "ready"),
         (2, "error"),
     ]
-    author = models.ForeignKey(
-        UserModel, on_delete=models.CASCADE, related_name="userdatasets"
+    schema = models.ForeignKey(
+        FakeCSVSchema,
+        on_delete=models.SET_NULL,
+        related_name="schemadatasets",
+        null=True,
+        blank=True,
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.IntegerField(default=0, choices=EXPORT_STATUS_CHOICES)
     download_link = models.URLField(null=True, blank=True)
     task_id = models.TextField()
+
+    class Meta:
+        ordering = ("-created",)

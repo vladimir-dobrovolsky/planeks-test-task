@@ -3,7 +3,19 @@
 {% block content %}
   <section class="uk-section">
     <h1>
-      home.html
+      Welcome to {{ request.site.name }}!
     </h1>
+    {% if request.user.is_authenticated %}
+      <div class="uk-margin-top">
+        <a href="{% url 'list' %}" class="uk-button uk-button-default uk-margin-right">View data schemas</a>
+        <a href="{% url 'create' %}" class="uk-button uk-button-default uk-margin-right">Create a new schema</a>
+      </div>
+    {% else %}
+      <div class="uk-margin-top " uk-margin>
+        <a href="{% url 'signup' %}" class="uk-button uk-button-default">Signup</a>
+        <span style="margin: auto 8px;"> or </span>
+        <a href="{% url 'login' %}" class="uk-button uk-button-default">Login</a>
+      </div>
+    {% endif %}
   </section>
 {% endblock %}
