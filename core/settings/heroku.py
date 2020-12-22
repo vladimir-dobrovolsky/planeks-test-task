@@ -10,8 +10,8 @@ MIDDLEWARE += [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/tmp/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "tmp")
 
 FILE_UPLOAD_PERMISSIONS = 0o644
 

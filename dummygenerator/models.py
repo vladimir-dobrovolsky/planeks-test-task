@@ -106,7 +106,7 @@ class FakeCSVSchema(models.Model):
                     row[column] = value
                 writer.writerow(row)
 
-        return f"/media/{uid}.csv"
+        return f"{settings.MEDIA_URL}{uid}.csv"
 
 
 class FakeCSVSchemaColumn(models.Model):
