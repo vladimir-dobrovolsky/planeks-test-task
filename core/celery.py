@@ -8,7 +8,7 @@ os.environ.setdefault(
     os.environ.get("DJANGO_SETTINGS_MODULE", "core.settings.dev"),
 )
 
-app = Celery("core", broker="redis://redis:6379")
+app = Celery("core", broker=os.environ.get("REDIS_URL", "redis://redis:6379"))
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
