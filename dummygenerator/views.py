@@ -176,10 +176,9 @@ class DeleteSchema(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return messages.error(self.request, "Error deleting schema")
 
 
-class ListDataSets(LoginRequiredMixin, FormMixin, DetailView):
+class ListDataSets(LoginRequiredMixin, UserPassesTestMixin, FormMixin, DetailView):
     """
     Return the list user-created schemas.
-    TODO: Check author
     """
 
     model = FakeCSVSchema
@@ -187,6 +186,12 @@ class ListDataSets(LoginRequiredMixin, FormMixin, DetailView):
     template_name = "dummygenerator/schemas/datasets-list.html"
 
     form_class = DatasetCreateForm
+
+    def test_func(self):
+        # checking if request user is author of selected schema
+        obj = self.get_object()
+        if obj.author == self.request.user:
+            return True
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
