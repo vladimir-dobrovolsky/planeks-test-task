@@ -117,7 +117,7 @@ class FakeCSVSchema(models.Model):
                     row[column] = value
                 writer.writerow(row)
 
-        if settings.AWS == "storages.backends.s3boto3.S3StaticStorage":
+        if settings.AWS:
             return f"https://planeks-test.s3.eu-central-1.amazonaws.com{settings.MEDIA_URL}{uid}.csv"
         else:
             return f"{settings.MEDIA_URL}{uid}.csv"
