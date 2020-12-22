@@ -150,6 +150,7 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 
 # own var for deployment testing
 HEROKU_MEDIA = False
+AWS = False
 
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, "core", "static"),

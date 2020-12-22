@@ -26,5 +26,6 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
 HEROKU_MEDIA = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS = True
 
 django_heroku.settings(locals())
