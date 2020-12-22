@@ -85,7 +85,7 @@ class FakeCSVSchema(models.Model):
         for i in columns:
             fieldnames.append(i["name"])
 
-        with open(settings.MEDIA_ROOT + f"/export/{uid}.csv", "w", newline="") as f:
+        with open(settings.MEDIA_ROOT + f"/{uid}.csv", "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames, dialect="custom")
             writer.writeheader()
             for i in range(rows):
@@ -106,7 +106,7 @@ class FakeCSVSchema(models.Model):
                     row[column] = value
                 writer.writerow(row)
 
-        return f"/media/export/{uid}.csv"
+        return f"/media/{uid}.csv"
 
 
 class FakeCSVSchemaColumn(models.Model):

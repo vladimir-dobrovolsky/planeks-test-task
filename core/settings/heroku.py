@@ -10,6 +10,11 @@ MIDDLEWARE += [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+FILE_UPLOAD_PERMISSIONS = 0o644
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
