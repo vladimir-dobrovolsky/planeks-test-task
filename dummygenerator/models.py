@@ -53,6 +53,10 @@ class FakeCSVSchema(models.Model):
     def generate_data_set(self, rows=5, uid=None):
         """Method to generate dataset from schema"""
 
+        # limit to 100 rows
+        if rows > 100:
+            rows = 100
+
         faker = Faker()
 
         def fake_data(data_type: int, val_range=(0, 100)):
