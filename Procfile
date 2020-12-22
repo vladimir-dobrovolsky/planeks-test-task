@@ -1,2 +1,2 @@
 web: gunicorn core.wsgi --log-file -
-worker: celery worker --app=tasks.app
+worker: celery --app core.celery worker
