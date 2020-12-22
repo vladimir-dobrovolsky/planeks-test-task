@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.core.files.storage import default_storage
 
 from faker import Faker
 
@@ -91,7 +92,7 @@ class FakeCSVSchema(models.Model):
         except OSError:
             print("error creating output folder")
 
-        with open(settings.MEDIA_ROOT + f"/{uid}.csv", "w", newline="") as f:
+        with default_storage.open(settings.MEDIA_ROOT + f"/{uid}.csv", "w") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames, dialect="custom")
             writer.writeheader()
             for i in range(rows):
