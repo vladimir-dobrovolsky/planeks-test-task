@@ -15,4 +15,6 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
+HEROKU_MEDIA = True
+
 django_heroku.settings(locals())
