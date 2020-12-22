@@ -73,13 +73,20 @@ class FakeCSVSchema(models.Model):
 
         import csv
 
+        csv.register_dialect(
+            "custom",
+            delimiter=self.column_separator,
+            quotechar=self.string_character,
+            quoting=csv.QUOTE_ALL,
+        )
+
         columns = self.schemacolumns.all().values()
         fieldnames = []
         for i in columns:
             fieldnames.append(i["name"])
 
         with open(settings.MEDIA_ROOT + f"/export/{uid}.csv", "w", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer = csv.DictWriter(f, fieldnames=fieldnames, dialect="custom")
             writer.writeheader()
             for i in range(rows):
                 row = {}
